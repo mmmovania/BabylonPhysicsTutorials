@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+	<!-- 	
+	https://playground.babylonjs.com/#NLLNMD#6
+	-->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://preview.babylonjs.com/ammo.js"></script>
+        <script src="https://preview.babylonjs.com/cannon.js"></script>
+        <script src="https://preview.babylonjs.com/Oimo.js"></script>
+        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+		
+		
+		
+        var createScene = async function () {
+		
+		var mouseSphere;
+		
+		// This creates a basic Babylon Scene object (non-mesh)
+		var scene = new BABYLON.Scene(engine);
+
+		var camera = new BABYLON.ArcRotateCamera("camera", BABYLON.Tools.ToRadians(90), BABYLON.Tools.ToRadians(65), 20, BABYLON.Vector3.Zero(), scene);
+  
+		// This attaches the camera to the canvas
+		camera.attachControl(canvas, true);
+
+		// This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+		var light = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -1, -1), scene);
+		light.position = new BABYLON.Vector3(0,-10,20);
+		 
+				
+		// Enable physics
+		await Ammo();
+		scene.enablePhysics(new BABYLON.Vector3(0,-10,0), new BABYLON.AmmoJSPlugin()); 
+
+		// Our built-in 'ground' shape		
+		var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 20, height: 20, depth: 0.1}, scene);
+		let groundMaterial = new BABYLON.StandardMaterial("Ground Material", scene);
+		ground.material = groundMaterial;
+		ground.receiveShadows = true;
+		
+		//create our crate box
+		const box1 = BABYLON.MeshBuilder.CreateBox("box1"); 		
+		box1.position.y = 6;
+		
+		
+		//make crate material
+		box1.material = new BABYLON.StandardMaterial("Box Material", scene);
+		box1.material.diffuseTexture = new BABYLON.Texture("./textures/crate.jpg", scene);
+		
+		const box2 = box1.createInstance("box2");
+		box2.position.y = 3;
+		
+		//make shadow generator
+		var shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
+		shadowGenerator.useBlurExponentialShadowMap = true;
+		shadowGenerator.addShadowCaster(box1);
+		shadowGenerator.addShadowCaster(box2);
+		shadowGenerator.setDarkness(0.5);
+		 
+		//create physics objects from ground mesh
+		ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, 
+			BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.5 }, scene
+		);
+		
+		//box1 is static
+		box1.physicsImpostor = new BABYLON.PhysicsImpostor(box1, 
+			BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.5 }, scene
+		);
+		
+		//box2 is dynamic
+		box2.physicsImpostor = new BABYLON.PhysicsImpostor( box2, 
+			BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, friction: 0.5, restitution: 0.5 }, scene
+		);
+		
+		var distanceJoint = new BABYLON.DistanceJoint({ maxDistance: 3 });
+		box1.physicsImpostor.addJoint(box2.physicsImpostor, distanceJoint);
+		
+		let jointPoints = [  box1.position, box2.position];
+		let line = BABYLON.MeshBuilder.CreateLines("line", {points: jointPoints, updatable: true});
+		line.color = new BABYLON.Color3(1,0,0); 
+
+
+		//picking related logic		
+		mouseSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.2, segments:10});	
+		 
+		mouseSphere.physicsImpostor = new BABYLON.PhysicsImpostor( mouseSphere, 
+			BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0}, scene 
+		);
+		mouseSphere.receiveShadows = true;
+		mouseSphere.isVisible = false;
+		 
+		//distance constraint line
+		const myPoints = [
+			new BABYLON.Vector3(0, 0, 0),
+			new BABYLON.Vector3(0, 0, 0) 
+		]
+		const options = {
+			points: myPoints,
+			updatable: true
+		}
+        let lines = BABYLON.MeshBuilder.CreateLines("lines", options);
+		lines.color = new BABYLON.Color3(0,1,0);
+		mouseJoint = null;
+		 
+		//mouse down event
+		scene.onPointerDown = function castRay()
+		{   
+			mouseSphere.isVisible = false;
+			var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+			if (pickResult.hit) 
+			{
+				//pickResult.pickedPoint
+				//console.log("picked" + pickResult.pickedMesh);
+				//var distanceJoint = new BABYLON.DistanceJoint({ maxDistance: 3 });
+				//box1.physicsImpostor.addJoint(box2.physicsImpostor, distanceJoint);
+				if(pickResult.pickedMesh.name!="ground")
+				{					
+					mouseSphere.position = pickResult.pickedPoint;
+					mouseSphere.isVisible = true;
+					
+					mouseJoint = new BABYLON.DistanceJoint({ maxDistance: 3 });
+					//mouseJoint.physicsImpostor = pickResult.pickedMesh.physicsImpostor;
+					pickResult.pickedMesh.physicsImpostor.addJoint(mouseSphere.physicsImpostor, mouseJoint);
+									
+					//const myPoints = [  box1.position, box2.position];
+					//const lines = BABYLON.MeshBuilder.CreateLines("lines", {points: myPoints});
+					
+		 
+					setTimeout(function () {
+						camera.detachControl(canvas);
+					}, 0);
+				}
+			} 
+		}
+		
+		scene.onPointerMove = function OnMouseMove()
+		{
+			if( mouseSphere.isVisible ) 
+			{
+				var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+				if(pickResult.hit) 
+				{
+					
+					mouseSphere.position = pickResult.pickedPoint;
+					
+					myPoints[0] = box2.position;
+					myPoints[1] = pickResult.pickedPoint;
+					
+					lines = BABYLON.MeshBuilder.CreateLines("lines", {points: myPoints, instance: lines}); 
+					lines.isVisible = true;
+					
+					//update the joint line
+					jointPoints[1] = box2.position;
+					line = BABYLON.MeshBuilder.CreateLines("line", {points: jointPoints, instance: line}); 
+				}
+			}
+		}
+		
+		//mouse up event
+		scene.onPointerUp = function OnMouseUp()
+		{
+			mouseSphere.isVisible = false;
+			camera.attachControl(canvas, true);
+			lines.isVisible = false;
+			 
+		 	scene.getPhysicsEngine().removeJoint(box2.physicsImpostor, mouseSphere.physicsImpostor, mouseJoint);
+ 
+			mouseJoint = null;
+		}
+		
+		box2.physicsImpostor.registerAfterPhysicsStep ( () => 
+		{ 
+			//update the joint line
+			jointPoints[1] = box2.position;
+			line = BABYLON.MeshBuilder.CreateLines("line", {points: jointPoints, instance: line}); 
+		});
+		
+		return scene;
+	};
+    
+	window.initFunction = async function() {
+		var asyncEngineCreation = async function() {
+        try {
+			return createDefaultEngine();
+        } catch(e) {
+			console.log("the available createEngine function failed. Creating the default engine instead");
+            return createDefaultEngine();
+        }
+    }
+
+    window.engine = await asyncEngineCreation();
+	if (!engine) throw 'engine should not be null.';
+	startRenderLoop(engine, canvas);
+    window.scene = createScene();};
+	initFunction().then(() => {scene.then(returnedScene => { sceneToRender = returnedScene; });
+	});
+
+    // Resize
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+    </script>
+</body>
+</html>
