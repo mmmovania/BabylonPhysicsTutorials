@@ -5,7 +5,7 @@ Demo Screenshots
 ================
 Here are a few snapshots of the tutorial demos.
 
-Simple Box: Shows how to add a single rigid body - [Live Demo](https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleBox.html){:target="_blank"}
+Simple Box: Shows how to add a single rigid body - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleBox.html" target="_blank">Live Demo</a> 
 ![alt text](images/SimpleBox.png "Simple Box")
 
 Multiple Boxes: Shows how to add multiple rigid bodies - [Live Demo](https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/MultipleBoxes.html){:target="_blank"}
