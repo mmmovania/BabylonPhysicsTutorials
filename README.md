@@ -37,10 +37,10 @@ Shows how to add a simple point to point constraint - <a href="https://raw.githa
 Showing how to create rolling ball physics. This demo shows you how to make a ball roll on the ground using the keyboard keys - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleBall.html" target="_blank">Live Demo</a>
 
 ### Controls:
-Press 'w' to roll ball forward
-Press 's' to roll ball backward
-Press 'a' to roll ball to the left
-Press 'd' to roll ball to the right
+Press 'w' to roll ball forward</br>
+Press 's' to roll ball backward</br>
+Press 'a' to roll ball to the left</br>
+Press 'd' to roll ball to the right</br>
 
 <a href="https://playground.babylonjs.com/#QPFZNY">Babylon.js Playground</a>
 
