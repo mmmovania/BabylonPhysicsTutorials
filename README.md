@@ -12,6 +12,9 @@ Simple Box: Shows how to add a single rigid body - <a href="https://raw.githack.
 ![alt text](images/SimpleBox.png "Simple Box")
 
 Multiple Boxes: Shows how to add multiple rigid bodies - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/MultipleBoxes.html" target="_blank">Live Demo</a>
+
+<a href="https://playground.babylonjs.com/#8P4W9T">Babylon.js Playground</a>
+
 ![alt text](images/MultipleBoxes.png "Multiple Boxes")
 
 Shooting: Showing how to handle keyboard events to launch projectile in the viewing direction for shooting boxes -  <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Shooting.html" target="_blank">Live Demo</a>
