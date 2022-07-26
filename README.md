@@ -24,6 +24,9 @@ Shooting: Shows how to handle the left mouse click to launch projectile in the v
 ![alt text](images/Shooting.png "Shooting")
 
 Simple Joint: Shows how to add a simple point to point constraint - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleJoint.html" target="_blank">Live Demo</a>
+
+<a href="https://playground.babylonjs.com/#BPLMNR">Babylon.js Playground</a>
+
 ![alt text](images/SimpleJoint.png "Simple Joint")
 
 Simple Ball: Showing how to create rolling ball physics - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleBall.html" target="_blank">Live Demo</a>
