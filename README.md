@@ -17,7 +17,10 @@ Multiple Boxes: Shows how to add multiple rigid bodies - <a href="https://raw.gi
 
 ![alt text](images/MultipleBoxes.png "Multiple Boxes")
 
-Shooting: Showing how to handle keyboard events to launch projectile in the viewing direction for shooting boxes -  <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Shooting.html" target="_blank">Live Demo</a>
+Shooting: Shows how to handle the left mouse click to launch projectile in the viewing direction for shooting balls on the boxes -  <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Shooting.html" target="_blank">Live Demo</a>
+
+<a href="https://playground.babylonjs.com/#VSB2WG">Babylon.js Playground</a>
+
 ![alt text](images/Shooting.png "Shooting")
 
 Simple Joint: Shows how to add a simple point to point constraint - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleJoint.html" target="_blank">Live Demo</a>
