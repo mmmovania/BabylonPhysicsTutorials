@@ -40,6 +40,6 @@ Press 'd' to roll ball to the right</br>
 ![alt text](images/SimpleBall.png "Simple Ball")
 
 ## Picking
-Shows how to use the left mouse button to pick a rigid body - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Picking.html" target="_blank">Live Demo</a> - <a href="https://playground.babylonjs.com/">Babylon.js Playground</a>
+Shows how to use the left mouse button to pick a rigid body - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Picking.html" target="_blank">Live Demo</a> - <a href="https://playground.babylonjs.com/#UASVC5">Babylon.js Playground</a>
 
 ![alt text](images/Picking.png "Picking")
