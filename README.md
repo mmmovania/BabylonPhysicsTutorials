@@ -6,7 +6,9 @@ Demo Screenshots
 Here are a few snapshots of the tutorial demos.
 
 Simple Box: Shows how to add a single rigid body - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleBox.html" target="_blank">Live Demo</a> 
-<a href="https://playground.babylonjs.com/#KPZCU8">Playground</a>
+
+<a href="https://playground.babylonjs.com/#KPZCU8">Babylon.js Playground</a>
+
 ![alt text](images/SimpleBox.png "Simple Box")
 
 Multiple Boxes: Shows how to add multiple rigid bodies - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/MultipleBoxes.html" target="_blank">Live Demo</a>
