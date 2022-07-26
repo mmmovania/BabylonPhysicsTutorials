@@ -30,6 +30,16 @@ Simple Joint: Shows how to add a simple point to point constraint - <a href="htt
 ![alt text](images/SimpleJoint.png "Simple Joint")
 
 Simple Ball: Showing how to create rolling ball physics - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleBall.html" target="_blank">Live Demo</a>
+This demo shows you how to make a ball roll on the ground using the keyboard keys.
+
+## Controls:
+Press 'w' to roll ball forward
+Press 's' to roll ball backward
+Press 'a' to roll ball to the left
+Press 'd' to roll ball to the right
+
+<a href="https://playground.babylonjs.com/#QPFZNY">Babylon.js Playground</a>
+
 ![alt text](images/SimpleBall.png "Simple Ball")
 
 Picking: Shows how to handle mouse events to pick a rigid body -  <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Picking.html" target="_blank">Live Demo</a>
