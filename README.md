@@ -49,3 +49,7 @@ Shows how to use the hinge joint to make a bridge - <a href="https://raw.githack
 
 ![alt text](images/Bridge.png "Bridge")
 
+## Cloth
+Shows how to make a cloth softbody - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Cloth.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#8IJ09P#8">Babylon.js Playground</a>
+
+![alt text](images/Cloth.png "Cloth")
