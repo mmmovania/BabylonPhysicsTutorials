@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://preview.babylonjs.com/ammo.js"></script>
+        <script src="https://preview.babylonjs.com/cannon.js"></script>
+        <script src="https://preview.babylonjs.com/Oimo.js"></script>
+        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+        var createScene = async function () {
+		 // This creates a basic Babylon Scene object (non-mesh)
+		var scene = new BABYLON.Scene(engine);
+
+		var camera = new BABYLON.ArcRotateCamera("camera", BABYLON.Tools.ToRadians(-90), 
+		BABYLON.Tools.ToRadians(65), 30, BABYLON.Vector3.Zero(), scene);
+
+		// This attaches the camera to the canvas
+		camera.attachControl(canvas, true);
+
+		// This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+		var light = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -1, -1), scene);
+		light.position = new BABYLON.Vector3(0,-10,20);
+
+		//we allow babylon to automatically calculate the appropriate shadow z values
+		light.autoCalcShadowZBounds = true;
+
+		// Enable physics
+		await Ammo();
+		scene.enablePhysics(new BABYLON.Vector3(0,-10,0), new BABYLON.AmmoJSPlugin()); 
+
+		// Our built-in 'ground' shape.
+		var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 20, height: 20, depth: 0.25}, scene);
+		let groundMaterial = new BABYLON.StandardMaterial("Ground Material", scene);
+		ground.material = groundMaterial;
+		ground.receiveShadows = true;	
+			
+		//make shadow generator
+		var shadowGenerator = new BABYLON.ShadowGenerator(1024, light);	
+		shadowGenerator.setDarkness(0.5);
+			
+		//create physics objects from ground mesh
+		ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, 
+			BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.5 }, scene
+		);
+
+		//next we create 5 boxes to fall on the bridge
+		const NUM_BOXES = 5;
+		const b = BABYLON.MeshBuilder.CreateBox("box", {width:2, height:0.2, depth:2}); 
+		b.material = new BABYLON.StandardMaterial("Box Material", scene); 
+		b.material.diffuseColor = new BABYLON.Color3(0,1,0);
+		b.isVisible = false;
+		boxes = [];
+			
+		for(var i=0;i<NUM_BOXES;++i) {
+			const box = b.createInstance("box"+i); 
+			shadowGenerator.addShadowCaster(box);
+			boxes.push(box);
+			box.position.y = 6 + i; 
+			//create crate physics object
+			box.physicsImpostor = new BABYLON.PhysicsImpostor( box, 
+				BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1}, scene
+			);
+		}
+			
+		//we create a bridge with 10 planks
+		const NUM_PLANKS = 10;
+
+		//Create our base plank box
+		//This is our main plank mesh which we will clone NUM_PLANKS times 
+		const plankBase = BABYLON.MeshBuilder.CreateBox("plank", {width:1, height:0.25, depth:5}); 
+		plankBase.position.y = 5;
+		plankBase.material = new BABYLON.StandardMaterial("Box Material", scene);	
+		plankBase.material.diffuseColor = new BABYLON.Color3(0.53, 0.27, 0);
+		plankBase.isVisible = false;
+
+		//our array to contain all planks	
+		planks = [];
+
+		//we identify how much delta we need to provide
+		//uniform separation between the planks
+		const dx = ground._width / NUM_PLANKS; 
+	  
+		//starting position of the first plank
+		var x = -ground._width/2.0 + dx/2.0;
+
+		//create our hinge joint
+		var joint = new BABYLON.HingeJoint({  
+			mainPivot: new BABYLON.Vector3(0, 0, 0),
+			connectedPivot: new BABYLON.Vector3(-dx, 0, 0),
+			mainAxis: new BABYLON.Vector3(0, 1, 0),
+			connectedAxis: new BABYLON.Vector3(0, 1, 0),
+			nativeParams: { }
+		}); 
+
+		for(var i=0;i<NUM_PLANKS;++i) 
+		{
+			//we create an instance from our main plank
+			const plank = plankBase.createInstance("plank_"+i); 
+
+			//we add the new instance to our planks array
+			planks.push( plank );
+
+			//we add it as a shadow caster so it may cast shadow on the ground
+			shadowGenerator.addShadowCaster(plank);
+			
+			//we position the plank to its place
+			//we are just placing the planks such that all of them
+			//cover the entire width of the ground plane
+			plank.position.x = x; 
+			x += dx;
+			
+			//for the two corner planks we make them statio
+			const mass = (i==0 || i== (NUM_PLANKS-1))?0:1;
+
+			//create plank physics object
+			plank.physicsImpostor = new BABYLON.PhysicsImpostor( plank, 
+				BABYLON.PhysicsImpostor.BoxImpostor, { mass: mass }, scene
+			);
+	 
+			//we create a hinge joint to keep the planks intact to each other thus preventing
+			//them from falling down on the ground     
+			if(i>0)
+			{
+				//we create a hinge constraint between the current and previous plank
+				planks[i-1].physicsImpostor.addJoint(planks[i].physicsImpostor, joint);		 
+			}
+		}
+
+		//we create 4 poles for the bridge
+
+		//we first create the master pole
+		const poleBase = BABYLON.MeshBuilder.CreateBox("pole", {width:0.5, height:5, depth:0.5});
+		poleBase.material = new BABYLON.StandardMaterial("Pole Material", scene);	
+		poleBase.material.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+
+		//add poleBase as shodowcaster
+		shadowGenerator.addShadowCaster(poleBase);
+
+		//get the pole dimensions (width and height)
+		const poleBBox = poleBase.getBoundingInfo().boundingBox;
+		const poleWidth = poleBBox.maximum.x - poleBBox.minimum.x;
+		const poleHeight = poleBBox.maximum.y - poleBBox.minimum.y;
+
+		//get the depth of the plank
+		const plankBBox = plankBase.getBoundingInfo().boundingBox;
+		const plankDepth = plankBBox.maximum.z - plankBBox.minimum.z;
+		 
+		//adjust the pole position so that it snaps to the edge of the ground    
+		poleBase.position.x = -ground._width/2 + poleWidth/2.0;
+		poleBase.position.y = poleHeight/2.0;
+		poleBase.position.z = plankDepth/2.0 - poleWidth/2.0;
+
+		//next we create three instances of the poleBase master pole
+		const pole_1 = poleBase.createInstance("pole_1"); 
+		const pole_2 = poleBase.createInstance("pole_2"); 
+		const pole_3 = poleBase.createInstance("pole_3"); 
+
+		//add poles as shodowcaster
+		shadowGenerator.addShadowCaster(pole_1);
+		shadowGenerator.addShadowCaster(pole_2);
+		shadowGenerator.addShadowCaster(pole_3);
+
+		//position the poles 
+		pole_1.position.x += ground._width - poleWidth;
+		pole_2.position.x = pole_1.position.x;
+		
+		pole_2.position.z -= plankDepth - poleWidth;
+		pole_3.position.z = pole_2.position.z;
+
+		//boxes that fall below ground cause issues for the shadow caster so we remove such
+		//boxes from the shadow calculation
+		window.setTimeout(() => { 
+			scene.onAfterRenderObservable.add(() => {
+				for(var i=0;i<NUM_BOXES;++i) {
+					if(boxes[i].position.y < 0)
+						shadowGenerator.removeShadowCaster(boxes[i]);
+				}
+			}
+			)
+		}, 500);
+		
+		return scene;
+		};
+        
+       window.initFunction = async function() {
+		var asyncEngineCreation = async function() {
+        try {
+			return createDefaultEngine();
+        } catch(e) {
+			console.log("the available createEngine function failed. Creating the default engine instead");
+            return createDefaultEngine();
+        }
+    }
+
+    window.engine = await asyncEngineCreation();
+	if (!engine) throw 'engine should not be null.';
+	startRenderLoop(engine, canvas);
+    window.scene = createScene();};
+	initFunction().then(() => {scene.then(returnedScene => { sceneToRender = returnedScene; });
+	});
+
+    // Resize
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+    </script>
+</body>
+</html>
