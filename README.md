@@ -45,7 +45,7 @@ Shows how to use the left mouse button to pick a rigid body - <a href="https://r
 ![alt text](images/Picking.png "Picking")
 
 ## Bridge 
-Shows how to use the hinge joint to make a bridge - <a href="">Live Demo</a> - <a href="https://playground.babylonjs.com/#NNJJ5Z">Babylon.js Playground</a>
+Shows how to use the hinge joint to make a bridge - <a href="">Live Demo</a> - <a href="https://playground.babylonjs.com/#NNJJ5Z#1">Babylon.js Playground</a>
 
 ![alt text](images/Bridge.png "Bridge")
 
