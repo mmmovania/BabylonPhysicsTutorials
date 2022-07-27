@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://preview.babylonjs.com/ammo.js"></script>
+        <script src="https://preview.babylonjs.com/cannon.js"></script>
+        <script src="https://preview.babylonjs.com/Oimo.js"></script>
+        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+        var createScene = async function () {
+		// This creates a basic Babylon Scene object (non-mesh)
+		var scene = new BABYLON.Scene(engine);
+		
+		//enable physics
+		await Ammo();
+		scene.enablePhysics(null, new BABYLON.AmmoJSPlugin());
+
+		var camera = new BABYLON.ArcRotateCamera("camera", BABYLON.Tools.ToRadians(-90), BABYLON.Tools.ToRadians(65), 40, BABYLON.Vector3.Zero(), scene);
+		
+		// This attaches the camera to the canvas
+		camera.attachControl(canvas, true);
+	 
+		// This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+		var light = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(1, -1, 1), scene);
+		light.position = new BABYLON.Vector3(0,5,10);
+
+		//we allow babylon to automatically calculate the appropriate shadow z values
+		light.autoCalcShadowZBounds = true;
+		
+		//create ground floor
+		var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 40, height: 40, depth: 0.1}, scene);
+		let groundMaterial = new BABYLON.StandardMaterial("Ground Material", scene);
+		ground.material = groundMaterial;
+		ground.receiveShadows = true;
+
+		//set cloth subdivision and size 
+		var subdivisions = 16;
+		var clothWidth = 10;
+		var clothHeight = 10; 	
+		
+		//create cloth material
+		var clothMat = new BABYLON.StandardMaterial("cloth material", scene);    
+		clothMat.diffuseTexture = new BABYLON.Texture("https://raw.githubusercontent.com/mmmovania/BabylonPhysicsTutorials/main/textures/cloth_pattern.png", scene);
+		clothMat.backFaceCulling = false;
+
+		//we create the cloth piece using the CreateGround function
+		var cloth = BABYLON.MeshBuilder.CreateGround("cloth", { width: clothWidth, 
+																height: clothHeight, 
+																subdivisions: subdivisions,
+																}, scene);
+
+		//place the cloth piece a bit high so its visible to the viewer
+		cloth.position.y = 12;     
+		cloth.position.z -= clothHeight/2;
+		cloth.material = clothMat;
+			
+		//make physics impostor for cloth and assign properties
+		cloth.physicsImpostor =  new BABYLON.PhysicsImpostor(cloth, BABYLON.PhysicsImpostor.ClothImpostor, { mass: 1, damping: 0.006, margin:0.1, fixedPoints:3}, scene);
+		cloth.physicsImpostor.velocityIterations = 10; 
+		cloth.physicsImpostor.positionIterations = 10;
+		cloth.physicsImpostor.stiffness = 1;
+
+		//make shadow generator
+		var shadowGenerator = new BABYLON.ShadowGenerator(512, light); 
+		shadowGenerator.addShadowCaster(cloth);
+		shadowGenerator.setDarkness(0.5);
+
+		//make our collision sphere 
+		var collidingSphere = BABYLON.MeshBuilder.CreateSphere("collidingSphere", { diameter: 4, segments: 16 }, scene);
+		collidingSphere.position.y = 4;
+		collidingSphere.physicsImpostor = new BABYLON.PhysicsImpostor(collidingSphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0 }, scene);
+		shadowGenerator.addShadowCaster(collidingSphere);     
+
+
+		return scene;
+	};
+                
+				
+	window.initFunction = async function() {
+		var asyncEngineCreation = async function() {
+        try {
+			return createDefaultEngine();
+        } catch(e) {
+			console.log("the available createEngine function failed. Creating the default engine instead");
+            return createDefaultEngine();
+        }
+    }
+
+    window.engine = await asyncEngineCreation();
+	if (!engine) throw 'engine should not be null.';
+	startRenderLoop(engine, canvas);
+    window.scene = createScene();};
+	initFunction().then(() => {scene.then(returnedScene => { sceneToRender = returnedScene; });
+	});
+
+    // Resize
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+    </script>
+</body>
+</html>
