@@ -43,3 +43,9 @@ Press 'd' to roll ball to the right</br>
 Shows how to use the left mouse button to pick a rigid body - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Picking.html" target="_blank">Live Demo</a> - <a href="https://playground.babylonjs.com/#UASVC5">Babylon.js Playground</a>
 
 ![alt text](images/Picking.png "Picking")
+
+## Bridge 
+Shows how to use the hinge joint to make a bridge - <a href="">Live Demo</a> - <a href="https://playground.babylonjs.com/#NNJJ5Z">Babylon.js Playground</a>
+
+![alt text](images/Bridge.png "Bridge")
+
