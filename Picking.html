@@ -212,9 +212,11 @@
 			camera.attachControl(canvas, true);
 			lines.isVisible = false;
 			 
-		 	scene.getPhysicsEngine().removeJoint(box2.physicsImpostor, mouseSphere.physicsImpostor, mouseJoint);
- 
-			mouseJoint = null;
+			if(mouseJoint != null)
+			{
+				scene.getPhysicsEngine().removeJoint(box2.physicsImpostor, mouseSphere.physicsImpostor, mouseJoint);
+				mouseJoint = null;
+			}
 		}
 		
 		box2.physicsImpostor.registerAfterPhysicsStep ( () => 
