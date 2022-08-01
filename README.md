@@ -53,3 +53,16 @@ Shows how to use the hinge joint to make a bridge - <a href="https://raw.githack
 Shows how to make a cloth softbody - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Cloth.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#8IJ09P#10">Babylon.js Playground</a>
 
 ![alt text](images/Cloth.png "Cloth")
+
+## Vehicle
+Shows how to make a vehicle 
+
+### Controls:
+Press 'w' to accelerate the car forward</br>
+Press 's' to decelerate the car backward</br>
+Press 'a' to turn the car left</br>
+Press 'd' to turn the car right</br>
+
+<a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Vehicle.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#7IQAPH">Babylon.js Playground</a>
+
+![alt text](images/Vehicle.png "Car Demo")
