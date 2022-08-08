@@ -66,3 +66,21 @@ Press 'd' to turn the car right</br>
 <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/Vehicle.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#7IQAPH">Babylon.js Playground</a>
 
 ![alt text](images/Vehicle.png "Car Demo")
+
+## Tank
+Shows how to make a tank using raycast vehicle. This demo is based on the excellent open source project: https://github.com/RuanLucasGD/Simple-Militay-Tank-Physics.
+The tank rig is also from the same repo. so a huge shout out to RuanLucasGD. The fbx was converted to gltf using the 3dsmax babylon exporter. 
+
+### Controls:
+Press 'w' to accelerate the tank forward</br>
+Press 's' to decelerate the tank backward</br>
+Press 'a' to turn the tank left</br>
+Press 'd' to turn the tank right</br>
+Press 'q' to lift the gun up</br>
+Press 'e' to lower the gun down</br>
+Press 'z' to turn the turret left</br>
+Press 'c' to turn the turret right</br>
+
+<a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleTank.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#7IQAPH">Babylon.js Playground</a>
+
+![alt text](images/Vehicle.png "Car Demo")
