@@ -385,7 +385,7 @@
 					gunAngle += deltaX; 
 					if(gunAngle > -40 && gunAngle < 3)
 						gunMesh.rotate(BABYLON.Axis.X, BABYLON.Tools.ToRadians(deltaX));
-					gunAngle = Math.max(-40, Math.min(gunAngle, 7));
+					gunAngle = Math.max(-40, Math.min(gunAngle, 3));
 				}
 				
 				//see if we are accelerating
