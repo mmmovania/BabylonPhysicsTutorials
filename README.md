@@ -83,4 +83,4 @@ Press 'c' to turn the turret right</br>
 
 <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleTank.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#7IQAPH">Babylon.js Playground</a>
 
-![alt text](images/Vehicle.png "Car Demo")
+![alt text](images/SimpleTank.png "Simple Tank Demo")
