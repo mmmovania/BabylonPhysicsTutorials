@@ -83,4 +83,4 @@ Press 'c' to turn the turret right</br>
 
 <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleTank.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#BA06DD#2">Babylon.js Playground</a>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/lvPZ2uKDV7s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Watch the video](https://img.youtube.com/vi/lvPZ2uKDV7s/maxresdefault.jpg)](https://youtu.be/lvPZ2uKDV7s)
