@@ -76,8 +76,8 @@ Press 'w' to accelerate the tank forward</br>
 Press 's' to decelerate the tank backward</br>
 Press 'a' to turn the tank left</br>
 Press 'd' to turn the tank right</br>
-Press 'q' to lift the gun up</br>
-Press 'e' to lower the gun down</br>
+Press 'q' to lower the gun down</br>
+Press 'e' to lift the gun up</br>
 Press 'z' to turn the turret left</br>
 Press 'c' to turn the turret right</br>
 
