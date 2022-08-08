@@ -81,6 +81,6 @@ Press 'e' to lift the gun up</br>
 Press 'z' to turn the turret left</br>
 Press 'c' to turn the turret right</br>
 
-<a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleTank.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#7IQAPH">Babylon.js Playground</a>
+<a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleTank.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#BA06DD#2">Babylon.js Playground</a>
 
 ![alt text](images/SimpleTank.png "Simple Tank Demo")
