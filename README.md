@@ -1,9 +1,19 @@
 # BabylonPhysicsTutorials
-A simple set of tutorials for getting up and running with physics in Babylon.js using Ammo.js physics engine.
+A simple set of tutorials for getting up and running with physics in Babylon.js using Ammo.js physics engine. The following is the list of tutorials done so far.
+1. Simple Box (single box falling under gravity)
+2. Multiple Boxes (multiple boxes falling under gravity)
+3. Shooting (shows how to make a ball shoot in the viewing direction)
+4. Simple Joint (simple distance joint)
+5. Simple Ball (simple roll ball physics)
+6. Picking (raycast to pick meshes on mouse click)
+7. Bridge (simple bridge using hinge joints)
+8. Cloth (simple cloth modeled using soft body physics)
+9. Vehicle (simple car modelled using raycast physics)
+10. Tank (simple tank modelled using raycast physics)
 
-Demo Screenshots
+Demo Details and Screenshots
 ================
-Here are a few snapshots of the tutorial demos.
+Following are the details of the tutorial demos.
 
 ## Simple Box
 Shows how to add a single rigid body - <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleBox.html" target="_blank">Live Demo</a> - 
