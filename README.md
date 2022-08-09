@@ -82,6 +82,7 @@ Press 'z' to turn the turret left</br>
 Press 'c' to turn the turret right</br>
 
 <a href="https://raw.githack.com/mmmovania/BabylonPhysicsTutorials/master/SimpleTank.html">Live Demo</a> - <a href="https://playground.babylonjs.com/#BA06DD#2">Babylon.js Playground</a>
+<a href="https://playground.babylonjs.com/#BA06DD#6">Babylon.js Playground with Tracks using TrailMesh</a>
 
 Click the image below to watch a youtube capture of the tank demo.
 [![Watch the video](https://img.youtube.com/vi/lvPZ2uKDV7s/maxresdefault.jpg)](https://youtu.be/lvPZ2uKDV7s)
